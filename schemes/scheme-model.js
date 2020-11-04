@@ -6,13 +6,20 @@ module.exports = {
         return db('schemes')
     },
     findById(id){
-        return db('schemes').where({id}).first()
+        return db('schemes')
+        .where({id})
+        .first()
     },
     findSteps(id){
-        return db('schemes as s').join('steps as p', 's.id', 'p.scheme_id').select('s.scheme_name', 'p.instructions', 'p.step_number').where({'s.id': id}).orderBy('p.step_number')
+        return db('schemes as s')
+        .join('steps as p', 's.id', 'p.scheme_id')
+        .select('s.scheme_name', 'p.instructions', 'p.step_number')
+        .where({'s.id': id})
+        .orderBy('p.step_number')
     },
-    add(){
-        return
+    add(scheme){
+        db('schemes').insert(scheme)
+            return db('schemes')
     },
     addStep(){
         return
