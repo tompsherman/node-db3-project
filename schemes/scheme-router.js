@@ -48,10 +48,9 @@ router.get('/:id/steps', (req, res) => {
 
 router.post('/', (req, res) => {
   const schemeData = req.body;
-  console.log(schemeData)
+
   Schemes.add(schemeData)
     .then(scheme => {
-      console.log(scheme)
       res.status(201).json(scheme);
     })
     .catch(err => {
@@ -95,7 +94,7 @@ router.put('/:id', (req, res) => {
       res.json(updatedScheme);
     })
     .catch(err => {
-      res.status(500).json({ message: 'Failed to update scheme' });
+      res.status(500).json({ message: 'Failed to update scheme', error: err.message, extra: err.stack });
     });
 });
 

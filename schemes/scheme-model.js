@@ -17,17 +17,29 @@ module.exports = {
         .where({'s.id': id})
         .orderBy('p.step_number')
     },
-    add(scheme){
+    async add(scheme){
+        const [id] = await
         db('schemes').insert(scheme)
-            return db('schemes')
+            return db('schemes').where({id}).first()
     },
-    addStep(){
-        return
+    async addStep(id, step){
+        
     },
-    update(){
-        return
+    async update(changes, id){
+        const count = await db('schemes').where({id}).update(changes)
+        if (count){ 
+            return db('schemes').where({id}).first()
+        } else {
+            return Promise.resolve(null)
+        }
     },
-    remove(){
-        return
+    async remove(id){
+        const scheme = await db('schemes').where({id}).first()
+        if (!scheme){
+            return Promise.resolve(null)
+        } else {
+            await db('schemes').where({id}).del()
+            return Promise.resolve(scheme)
+        }
     }
 }
