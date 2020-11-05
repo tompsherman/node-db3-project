@@ -19,16 +19,26 @@ module.exports = {
     },
     async add(scheme){
         const [id] = await
-        db('schemes').insert(scheme)
-            return db('schemes').where({id}).first()
+        db('schemes')
+        .insert(scheme)
+            return db('schemes')
+            .where({id})
+            .first()
     },
-    async addStep(id, step){
-        
+
+    async addStep(step, scheme_id){
+        // db('steps').insert(step)
+        //     return db('steps').select().where({scheme_id}).orderBy('step_number')
+        const res = await db('steps').insert(step)
+            return db('steps').select().where({scheme_id}).orderBy('step_number')
     },
+
     async update(changes, id){
         const count = await db('schemes').where({id}).update(changes)
         if (count){ 
-            return db('schemes').where({id}).first()
+            return db('schemes')
+            .where({id})
+            .first()
         } else {
             return Promise.resolve(null)
         }
@@ -38,7 +48,9 @@ module.exports = {
         if (!scheme){
             return Promise.resolve(null)
         } else {
-            await db('schemes').where({id}).del()
+            await db('schemes')
+            .where({id})
+            .del()
             return Promise.resolve(scheme)
         }
     }

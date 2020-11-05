@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
       }
     })
     .catch(err => {
-      res.status(500).json({ message: 'Failed to get schemes' });
+      res.status(500).json({ message: 'Failed to get schemes', error: err.message, extra: err.stack });
     });
 });
 
@@ -65,16 +65,16 @@ router.post('/:id/steps', (req, res) => {
   Schemes.findById(id)
     .then(scheme => {
       if (scheme) {
-        return Schemes.addStep(stepData, id);
+        Schemes.addStep(stepData, id).then(step => {
+          console.log("route", step)
+          res.status(201).json(step);
+        })
       } else {
         res.status(404).json({ message: 'Could not find scheme with given id.' })
       }
     })
-    .then(step => {
-      res.status(201).json(step);
-    })
     .catch(err => {
-      res.status(500).json({ message: 'Failed to create new step' });
+      res.status(500).json({ message: 'Failed to create new step', error: err.message, extra: err.stack });
     });
 });
 
